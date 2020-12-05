@@ -1,0 +1,10 @@
+github.com/abbeymart/mcdbgo v0.1.0 h1:96L85XRnY93wKm0wtvEyNaN2DXOywzBNYo23ucToL8I=
+github.com/abbeymart/mcdbgo v0.1.0/go.mod h1:Z270oeytM/GDRwaKByyU36YBcqpJdgSFNu2od+2x8NY=
+github.com/abbeymart/mcresponsego v0.3.0 h1:ZFLCAo1DxG4RNcCiwVKUTcCa8X3ACjPJTfSVo6A+A40=
+github.com/abbeymart/mcresponsego v0.3.0/go.mod h1:6twtms15Y8A1ngqY1jgRADvZdqCkPHl5Q//WqlhWLSk=
+github.com/abbeymart/mctestgo v0.5.0 h1:uauSUZ+fKM496DQx2DmAKX1A/X/ekeup8LiZy1MaGFA=
+github.com/abbeymart/mctestgo v0.5.0/go.mod h1:6z87w/tScZc/s/EbNT8Uj9+1MEGIPvYgphiLxji7hq0=
+github.com/lib/pq v1.8.0 h1:9xohqzkUwzR4Ga4ivdTcawVS89YSDVxXMa3xJX3cGzg=
+github.com/lib/pq v1.8.0/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
+github.com/mattn/go-sqlite3 v1.14.5 h1:1IdxlwTNazvbKJQSxoJ5/9ECbEeaTTyeU7sEAZ5KKTQ=
+github.com/mattn/go-sqlite3 v1.14.5/go.mod h1:WVKg1VTActs4Qso6iwGbiFih2UIHo0ENGwNd0Lj+XmI=
