@@ -39,34 +39,34 @@ func CreateLog(log LogParam, table string, tableRecords interface{}, userId stri
 	return mcresponse.ResponseMessage{}, nil
 }
 
-func UpdateLog(log LogParam, table string, tableRecords interface{}, newTableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
+func UpdateLog(log LogParam, tableName string, tableRecords interface{}, newTableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
 	return mcresponse.ResponseMessage{}, nil
 }
 
-func ReadLog(log LogParam, table string, tableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
+func ReadLog(log LogParam, tableName string, tableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
 	return mcresponse.ResponseMessage{}, nil
 }
 
-func DeleteLog(log LogParam, table string, tableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
+func DeleteLog(log LogParam, tableName string, tableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
 	return mcresponse.ResponseMessage{}, nil
 }
 
-func LoginLog(log LogParam, tableRecords interface{}, userId string, table string, ) (mcresponse.ResponseMessage, error) {
+func LoginLog(log LogParam, tableRecords interface{}, userId string, tableName string, ) (mcresponse.ResponseMessage, error) {
 	// default-values
-	if table == "" {
-		table = "users"
+	if tableName == "" {
+		tableName = "users"
 	}
 
 	return mcresponse.ResponseMessage{}, nil
 }
 
-func LogoutLog(log LogParam, tableRecords interface{}, userId string, table string, ) (mcresponse.ResponseMessage, error) {
+func LogoutLog(log LogParam, tableRecords interface{}, userId string, tableName string, ) (mcresponse.ResponseMessage, error) {
 	// default-values
-	if table == "" {
-		table = "users"
+	if tableName == "" {
+		tableName = "users"
 	}
 
 	return mcresponse.ResponseMessage{}, nil
