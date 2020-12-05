@@ -34,45 +34,45 @@ func NewLog(auditDb *sql.DB, auditTable string) LogParam {
 	return result
 }
 
-func CreateLog(log LogParam, table string, tableRecords interface{}, userId string) mcresponse.ResponseMessage {
+func CreateLog(log LogParam, table string, tableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
-	return mcresponse.ResponseMessage{}
+	return mcresponse.ResponseMessage{}, nil
 }
 
-func UpdateLog(log LogParam, table string, tableRecords interface{}, newTableRecords interface{}, userId string) mcresponse.ResponseMessage {
+func UpdateLog(log LogParam, table string, tableRecords interface{}, newTableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
-	return mcresponse.ResponseMessage{}
+	return mcresponse.ResponseMessage{}, nil
 }
 
-func ReadLog(log LogParam, table string, tableRecords interface{}, userId string) mcresponse.ResponseMessage {
+func ReadLog(log LogParam, table string, tableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
-	return mcresponse.ResponseMessage{}
+	return mcresponse.ResponseMessage{}, nil
 }
 
-func DeleteLog(log LogParam, table string, tableRecords interface{}, userId string) mcresponse.ResponseMessage {
+func DeleteLog(log LogParam, table string, tableRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
-	return mcresponse.ResponseMessage{}
+	return mcresponse.ResponseMessage{}, nil
 }
 
-func LoginLog(log LogParam, tableRecords interface{}, userId string, table string, ) mcresponse.ResponseMessage {
+func LoginLog(log LogParam, tableRecords interface{}, userId string, table string, ) (mcresponse.ResponseMessage, error) {
 	// default-values
 	if table == "" {
 		table = "users"
 	}
 
-	return mcresponse.ResponseMessage{}
+	return mcresponse.ResponseMessage{}, nil
 }
 
-func LogoutLog(log LogParam, tableRecords interface{}, userId string, table string, ) mcresponse.ResponseMessage {
+func LogoutLog(log LogParam, tableRecords interface{}, userId string, table string, ) (mcresponse.ResponseMessage, error) {
 	// default-values
 	if table == "" {
 		table = "users"
 	}
 
-	return mcresponse.ResponseMessage{}
+	return mcresponse.ResponseMessage{}, nil
 }
 
-func AuditLog(log LogParam, logType, userId string, options AuditLogOptionsType) mcresponse.ResponseMessage {
+func AuditLog(log LogParam, logType, userId string, options AuditLogOptionsType) (mcresponse.ResponseMessage, error) {
 
-	return mcresponse.ResponseMessage{}
+	return mcresponse.ResponseMessage{}, nil
 }
