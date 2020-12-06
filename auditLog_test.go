@@ -41,8 +41,8 @@ func TestSetCache(t *testing.T) {
 			priority: 1,
 			cost: 2000.00,
 		})
-		loginParams = tableRecords
-		logoutParams = tableRecords
+		//loginParams = tableRecords
+		//logoutParams = tableRecords
 	)
 
 	myDb := mcdb.DbConfig{
