@@ -5,8 +5,6 @@
 package mcauditlog
 
 import (
-	"encoding/json"
-	"fmt"
 	"testing"
 )
 import (
@@ -25,22 +23,22 @@ type TestParam struct {
 func TestSetCache(t *testing.T) {
 	// test-data: db-configuration settings
 	var (
-		tableName = "services"
-		userId    = "085f48c5-8763-4e22-a1c6-ac1a68ba07de"
-		tableRecords, _ = json.Marshal(TestParam{
-			name: "Abi",
-			desc: "Testing only",
-			url: "localhost:9000",
-			priority: 1,
-			cost: 1000.00,
-		})
-		tableNewRecords, _ = json.Marshal(TestParam{
-			name: "Abi Akindele",
-			desc: "Testing only - updated",
-			url: "localhost:9900",
-			priority: 1,
-			cost: 2000.00,
-		})
+		//tableName = "services"
+		//userId    = "085f48c5-8763-4e22-a1c6-ac1a68ba07de"
+		//tableRecords, _ = json.Marshal(TestParam{
+		//	name: "Abi",
+		//	desc: "Testing only",
+		//	url: "localhost:9000",
+		//	priority: 1,
+		//	cost: 1000.00,
+		//})
+		//tableNewRecords, _ = json.Marshal(TestParam{
+		//	name: "Abi Akindele",
+		//	desc: "Testing only - updated",
+		//	url: "localhost:9900",
+		//	priority: 1,
+		//	cost: 2000.00,
+		//})
 		//loginParams = tableRecords
 		//logoutParams = tableRecords
 	)
@@ -58,33 +56,28 @@ func TestSetCache(t *testing.T) {
 	myDb.Uri = "localhost:5432"
 	myDb.Options = mcdb.DbConnectOptions{}
 
-	var (
-		dbc mcdb.DbConnectionType
-		err error
-	)
+	//var (
+	//	dbc mcdb.DbConnectionType
+	//	err error
+	//)
 
 	// db-connection
-	dbc, err = myDb.OpenDb()
+	dbc, err := myDb.OpenDb()
+	// defer dbClose
+	defer myDb.CloseDb()
 	// expected db-connection result
-	var logInstanceResult = LogParam{AuditDb: dbc, AuditTable: "audits"}
+	mcLogResult := LogParam{AuditDb: dbc, AuditTable: "audits"}
 	// audit-log instance
-	var mcLog = NewLog(dbc, "audits")
+	mcLog := NewAuditLog(dbc, "audits")
 
 	mctest.McTest(mctest.OptionValue{
-		Name: "should successfully connect to the database",
+		Name: "should connect and return an instance object:",
 		TestFunc: func() {
-			dbc, err := myDb.OpenDb()
-			fmt.Println(dbc)
-			mctest.AssertEquals(t, err, nil, "response-code should be: nil")
-			//mctest.AssertEquals(t, req.Message, res.Message, "response-message should be: "+res.Message)
+			mctest.AssertEquals(t, err, nil, "error-response should be: nil")
+			mctest.AssertEquals(t, mcLog, mcLogResult, "db-connection instance should be: " + mcLogResult.String())
 		},
 	})
 
-	// TODO: audit-log test cases
-
-	if dbc != nil || err == nil {
-		myDb.CloseDb()
-	}
 
 	mctest.PostTestResult()
 }

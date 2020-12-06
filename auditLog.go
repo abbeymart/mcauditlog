@@ -70,7 +70,7 @@ const (
 	LogoutLog = "logout"
 )
 
-func NewLog(auditDb *sql.DB, auditTable string) LogParam {
+func NewAuditLog(auditDb *sql.DB, auditTable string) LogParam {
 	result := LogParam{}
 	result.AuditDb = auditDb
 	result.AuditTable = auditTable
@@ -88,44 +88,6 @@ func (log LogParam) String() string {
 	`,
 		log.AuditDb,
 		log.AuditTable)
-}
-
-func (log LogParam) CreateLog(table string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
-
-	return mcresponse.ResponseMessage{}, nil
-}
-
-func (log LogParam) UpdateLog(tableName string, logRecords interface{}, newLogRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
-
-	return mcresponse.ResponseMessage{}, nil
-}
-
-func (log LogParam) ReadLog(tableName string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
-
-	return mcresponse.ResponseMessage{}, nil
-}
-
-func (log LogParam) DeleteLog(tableName string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
-
-	return mcresponse.ResponseMessage{}, nil
-}
-
-func (log LogParam) LoginLog(logRecords interface{}, userId string, tableName string) (mcresponse.ResponseMessage, error) {
-	// default-values
-	if tableName == "" {
-		tableName = "users"
-	}
-
-	return mcresponse.ResponseMessage{}, nil
-}
-
-func (log LogParam) LogoutLog(logRecords interface{}, userId string, tableName string) (mcresponse.ResponseMessage, error) {
-	// default-values
-	if tableName == "" {
-		tableName = "users"
-	}
-
-	return mcresponse.ResponseMessage{}, nil
 }
 
 func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType) (mcresponse.ResponseMessage, error) {
@@ -335,3 +297,42 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		Value:   dbResult,
 	}, nil
 }
+
+func (log LogParam) CreateLog(table string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
+
+	return mcresponse.ResponseMessage{}, nil
+}
+
+func (log LogParam) UpdateLog(tableName string, logRecords interface{}, newLogRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
+
+	return mcresponse.ResponseMessage{}, nil
+}
+
+func (log LogParam) ReadLog(tableName string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
+
+	return mcresponse.ResponseMessage{}, nil
+}
+
+func (log LogParam) DeleteLog(tableName string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
+
+	return mcresponse.ResponseMessage{}, nil
+}
+
+func (log LogParam) LoginLog(logRecords interface{}, userId string, tableName string) (mcresponse.ResponseMessage, error) {
+	// default-values
+	if tableName == "" {
+		tableName = "users"
+	}
+
+	return mcresponse.ResponseMessage{}, nil
+}
+
+func (log LogParam) LogoutLog(logRecords interface{}, userId string, tableName string) (mcresponse.ResponseMessage, error) {
+	// default-values
+	if tableName == "" {
+		tableName = "users"
+	}
+
+	return mcresponse.ResponseMessage{}, nil
+}
+
