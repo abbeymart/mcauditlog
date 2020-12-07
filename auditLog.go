@@ -23,8 +23,8 @@ type AuditLogOptionsType struct {
 	AuditTable    string
 	TableName     string
 	LogRecords    interface{}
-	newLogRecords interface{}
-	queryParams   interface{}
+	NewLogRecords interface{}
+	QueryParams   interface{}
 }
 
 type AuditLogger interface {
@@ -130,16 +130,18 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 			return mcresponse.ResponseMessage{}, errors.New(errorMessage)
 		}
 
+		fmt.Println("before log-insert")
 		// compose SQL-script
-		sqlScript = "INSERT INTO " + tableName + " (table_name, log_records, log_type, log_by, log_at ) VALUES (?, ?, ?, ?, ?);"
+		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
 
 		// perform db-log-insert action
 		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
+		fmt.Printf("after log-insert: result => %v | err => %v \n", dbResult, err)
 	case UpdateLog:
 		// set params
 		tableName = options.TableName
 		logRecords = options.LogRecords
-		newLogRecords = options.newLogRecords
+		newLogRecords = options.NewLogRecords
 		logType = CreateLog
 		logAt = time.Now()
 
@@ -162,7 +164,7 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		}
 
 		// compose SQL-script
-		sqlScript = "INSERT INTO " + tableName + " (table_name, log_records, log_new_records log_type, log_by, log_at ) VALUES (?, ?, ?, ?, ?, ?);"
+		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_new_records log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5 $6)", log.AuditTable)
 
 		// perform db-log-insert action
 		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, newLogRecords, logType, logBy, logAt)
@@ -189,7 +191,7 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		}
 
 		// compose SQL-script
-		sqlScript = "INSERT INTO " + tableName + " (table_name, log_records, log_type, log_by, log_at ) VALUES (?, ?, ?, ?, ?);"
+		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
 
 		// perform db-log-insert action
 		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
@@ -216,7 +218,7 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		}
 
 		// compose SQL-script
-		sqlScript = "INSERT INTO " + tableName + " (table_name, log_records, log_type, log_by, log_at ) VALUES (?, ?, ?, ?, ?);"
+		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
 
 		// perform db-log-insert action
 		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
@@ -243,7 +245,7 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		}
 
 		// compose SQL-script
-		sqlScript = "INSERT INTO " + tableName + " (table_name, log_records, log_type, log_by, log_at ) VALUES (?, ?, ?, ?, ?);"
+		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
 
 		// perform db-log-insert action
 		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
@@ -270,7 +272,7 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		}
 
 		// compose SQL-script
-		sqlScript = "INSERT INTO " + tableName + " (table_name, log_records, log_type, log_by, log_at ) VALUES (?, ?, ?, ?, ?);"
+		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
 
 		// perform db-log-insert action
 		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
@@ -293,7 +295,7 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 	//}
 	return mcresponse.ResponseMessage{
 		Code:    "success",
-		Message: "successful create-log action",
+		Message: "successful audit-log action",
 		Value:   dbResult,
 	}, nil
 }
