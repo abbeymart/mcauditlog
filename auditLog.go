@@ -112,7 +112,6 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// set params
 		tableName = options.TableName
 		logRecords = options.LogRecords
-		logType = CreateLog
 		logAt = time.Now()
 
 		// validate params
@@ -142,7 +141,6 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		tableName = options.TableName
 		logRecords = options.LogRecords
 		newLogRecords = options.NewLogRecords
-		logType = CreateLog
 		logAt = time.Now()
 
 		// validate params
@@ -164,7 +162,7 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		}
 
 		// compose SQL-script
-		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_new_records log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5 $6)", log.AuditTable)
+		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, new_log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5, $6)", log.AuditTable)
 
 		// perform db-log-insert action
 		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, newLogRecords, logType, logBy, logAt)
@@ -172,7 +170,6 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// set params
 		tableName = options.TableName
 		logRecords = options.LogRecords
-		logType = CreateLog
 		logAt = time.Now()
 
 		// validate params
@@ -199,7 +196,6 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// set params
 		tableName = options.TableName
 		logRecords = options.LogRecords
-		logType = CreateLog
 		logAt = time.Now()
 
 		// validate params
@@ -226,7 +222,6 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// set params
 		tableName = options.TableName
 		logRecords = options.LogRecords
-		logType = CreateLog
 		logAt = time.Now()
 
 		// validate params
@@ -253,7 +248,6 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// set params
 		tableName = options.TableName
 		logRecords = options.LogRecords
-		logType = CreateLog
 		logAt = time.Now()
 
 		// validate params
