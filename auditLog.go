@@ -117,16 +117,28 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// validate params
 		var errorMessage = ""
 		if tableName == "" {
-			errorMessage = errorMessage + " | Table or Collection name is required."
+			errorMessage = "Table or Collection name is required."
 		}
 		if logBy == "" {
-			errorMessage = errorMessage + " | userId is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | userId is required."
+			} else {
+				errorMessage = "userId is required."
+			}
 		}
 		if logRecords == nil {
-			errorMessage = errorMessage + " | Created record(s) information is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | Created record(s) information is required."
+			} else {
+				errorMessage = "Created record(s) information is required."
+			}
 		}
 		if errorMessage != "" {
-			return mcresponse.ResponseMessage{}, errors.New(errorMessage)
+			return mcresponse.GetResMessage("paramsError",
+				mcresponse.ResponseMessageOptions{
+					Message: errorMessage,
+					Value:   nil,
+				}), errors.New(errorMessage)
 		}
 
 		fmt.Println("before log-insert")
@@ -146,19 +158,35 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// validate params
 		var errorMessage = ""
 		if tableName == "" {
-			errorMessage = errorMessage + " | Table or Collection name is required."
+			errorMessage = "Table or Collection name is required."
 		}
 		if logBy == "" {
-			errorMessage = errorMessage + " | userId is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | userId is required."
+			} else {
+				errorMessage = "userId is required."
+			}
 		}
 		if logRecords == nil {
-			errorMessage = errorMessage + " | Updated record(s) information is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | Updated record(s) information is required."
+			} else {
+				errorMessage = "Updated record(s) information is required."
+			}
 		}
 		if newLogRecords == nil {
-			errorMessage = errorMessage + " | New/Update record(s) information is required."
+			if errorMessage != ""{
+				errorMessage = errorMessage + " | New/Update record(s) information is required."
+			} else {
+				errorMessage = "New/Update record(s) information is required."
+			}
 		}
 		if errorMessage != "" {
-			return mcresponse.ResponseMessage{}, errors.New(errorMessage)
+			return mcresponse.GetResMessage("paramsError",
+				mcresponse.ResponseMessageOptions{
+					Message: errorMessage,
+					Value:   nil,
+				}), errors.New(errorMessage)
 		}
 
 		// compose SQL-script
@@ -175,16 +203,28 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// validate params
 		var errorMessage = ""
 		if tableName == "" {
-			errorMessage = errorMessage + " | Table or Collection name is required."
+			errorMessage = "Table or Collection name is required."
 		}
 		if logBy == "" {
-			errorMessage = errorMessage + " | userId is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | userId is required."
+			} else {
+				errorMessage = "userId is required."
+			}
 		}
 		if logRecords == nil {
-			errorMessage = errorMessage + " | Read/Get params/keyword information is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | Read/Get Params/Keywords information is required."
+			} else {
+				errorMessage = "Read/Get Params/Keywords information is required."
+			}
 		}
 		if errorMessage != "" {
-			return mcresponse.ResponseMessage{}, errors.New(errorMessage)
+			return mcresponse.GetResMessage("paramsError",
+				mcresponse.ResponseMessageOptions{
+					Message: errorMessage,
+					Value:   nil,
+				}), errors.New(errorMessage)
 		}
 
 		// compose SQL-script
@@ -201,16 +241,28 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// validate params
 		var errorMessage = ""
 		if tableName == "" {
-			errorMessage = errorMessage + " | Table or Collection name is required."
+			errorMessage = "Table or Collection name is required."
 		}
 		if logBy == "" {
-			errorMessage = errorMessage + " | userId is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | userId is required."
+			} else {
+				errorMessage = "userId is required."
+			}
 		}
 		if logRecords == nil {
-			errorMessage = errorMessage + " | Deleted record(s) information is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | Deleted record(s) information is required."
+			} else {
+				errorMessage = "Deleted record(s) information is required."
+			}
 		}
 		if errorMessage != "" {
-			return mcresponse.ResponseMessage{}, errors.New(errorMessage)
+			return mcresponse.GetResMessage("paramsError",
+				mcresponse.ResponseMessageOptions{
+					Message: errorMessage,
+					Value:   nil,
+				}), errors.New(errorMessage)
 		}
 
 		// compose SQL-script
@@ -227,16 +279,28 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// validate params
 		var errorMessage = ""
 		if tableName == "" {
-			errorMessage = errorMessage + " | Table or Collection name is required."
+			errorMessage = "Table or Collection name is required."
 		}
 		if logBy == "" {
-			errorMessage = errorMessage + " | userId is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | userId is required."
+			} else {
+				errorMessage = "userId is required."
+			}
 		}
 		if logRecords == nil {
-			errorMessage = errorMessage + " | Login record(s) information is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | Login record(s) information is required."
+			} else {
+				errorMessage = "Login record(s) information is required."
+			}
 		}
 		if errorMessage != "" {
-			return mcresponse.ResponseMessage{}, errors.New(errorMessage)
+			return mcresponse.GetResMessage("paramsError",
+				mcresponse.ResponseMessageOptions{
+					Message: errorMessage,
+					Value:   nil,
+				}), errors.New(errorMessage)
 		}
 
 		// compose SQL-script
@@ -253,16 +317,28 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		// validate params
 		var errorMessage = ""
 		if tableName == "" {
-			errorMessage = errorMessage + " | Table or Collection name is required."
+			errorMessage = "Table or Collection name is required."
 		}
 		if logBy == "" {
-			errorMessage = errorMessage + " | userId is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | userId is required."
+			} else {
+				errorMessage = "userId is required."
+			}
 		}
 		if logRecords == nil {
-			errorMessage = errorMessage + " | Logout record(s) information is required."
+			if errorMessage != "" {
+				errorMessage = errorMessage + " | Logout record(s) information is required."
+			} else {
+				errorMessage = "Logout record(s) information is required."
+			}
 		}
 		if errorMessage != "" {
-			return mcresponse.ResponseMessage{}, errors.New(errorMessage)
+			return mcresponse.GetResMessage("paramsError",
+				mcresponse.ResponseMessageOptions{
+					Message: errorMessage,
+					Value:   nil,
+				}), errors.New(errorMessage)
 		}
 
 		// compose SQL-script
@@ -272,46 +348,48 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
 
 	default:
-		return mcresponse.ResponseMessage{
-			Code:    "insertError",
-			Message: "Unknown log type and/or incomplete log information",
-		}, nil
+		return mcresponse.GetResMessage("logError",
+			mcresponse.ResponseMessageOptions{
+				Message: "Unknown log type and/or incomplete log information",
+				Value:   nil,
+			}), errors.New("unknown log type and/or incomplete log information")
 	}
 
 	// Handle error
 	if err != nil {
-		return mcresponse.ResponseMessage{}, errors.New(fmt.Sprintf("%v", err))
+		errMsg := fmt.Sprintf("%v", err)
+		return mcresponse.GetResMessage("logError",
+			mcresponse.ResponseMessageOptions{
+				Message: errMsg,
+				Value:   nil,
+			}), errors.New(errMsg)
 	}
-	// result
-	//type Result interface {
-	//	LastInsertId() (int64, error)
-	//	RowsAffected() (int64, error)
-	//}
-	return mcresponse.ResponseMessage{
-		Code:    "success",
-		Message: "successful audit-log action",
-		Value:   dbResult,
-	}, nil
+
+	return mcresponse.GetResMessage("success",
+		mcresponse.ResponseMessageOptions{
+			Message: "successful audit-log action",
+			Value:   dbResult,
+		}), nil
 }
 
 func (log LogParam) CreateLog(table string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
-	return mcresponse.ResponseMessage{}, nil
+	return mcresponse.GetResMessage("success", mcresponse.ResponseMessageOptions{}), nil
 }
 
 func (log LogParam) UpdateLog(tableName string, logRecords interface{}, newLogRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
-	return mcresponse.ResponseMessage{}, nil
+	return mcresponse.GetResMessage("success", mcresponse.ResponseMessageOptions{}), nil
 }
 
 func (log LogParam) ReadLog(tableName string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
-	return mcresponse.ResponseMessage{}, nil
+	return mcresponse.GetResMessage("success", mcresponse.ResponseMessageOptions{}), nil
 }
 
 func (log LogParam) DeleteLog(tableName string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error) {
 
-	return mcresponse.ResponseMessage{}, nil
+	return mcresponse.GetResMessage("success", mcresponse.ResponseMessageOptions{}), nil
 }
 
 func (log LogParam) LoginLog(logRecords interface{}, userId string, tableName string) (mcresponse.ResponseMessage, error) {
@@ -320,7 +398,7 @@ func (log LogParam) LoginLog(logRecords interface{}, userId string, tableName st
 		tableName = "users"
 	}
 
-	return mcresponse.ResponseMessage{}, nil
+	return mcresponse.GetResMessage("success", mcresponse.ResponseMessageOptions{}), nil
 }
 
 func (log LogParam) LogoutLog(logRecords interface{}, userId string, tableName string) (mcresponse.ResponseMessage, error) {
@@ -329,6 +407,5 @@ func (log LogParam) LogoutLog(logRecords interface{}, userId string, tableName s
 		tableName = "users"
 	}
 
-	return mcresponse.ResponseMessage{}, nil
+	return mcresponse.GetResMessage("success", mcresponse.ResponseMessageOptions{}), nil
 }
-
