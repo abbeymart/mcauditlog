@@ -1,4 +1,4 @@
-# mcauditlog
+# mcauditlog | github.com/abbeymart/mcauditlog
 
 - Transactions / audit log for data CRUD functions and access tracking
 - Includes audit/transaction logs to postgresDB

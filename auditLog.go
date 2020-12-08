@@ -48,13 +48,13 @@ type AccessLogger interface {
 }
 
 //type AuditCrudLogger interface {
-//	CreateLog(table string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error)
-//	UpdateLog(tableName string, logRecords interface{}, newLogRecords interface{}, userId string) (mcresponse.ResponseMessage, error)
-//	ReadLog(tableName string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error)
-//	DeleteLog(tableName string, logRecords interface{}, userId string) (mcresponse.ResponseMessage, error)
-//	LoginLog(logRecords interface{}, userId string, tableName string) (mcresponse.ResponseMessage, error)
-//	LogoutLog(logRecords interface{}, userId string, tableName string) (mcresponse.ResponseMessage, error)
-//	AuditLog(logType, userId string, options AuditLogOptionsType) (mcresponse.ResponseMessage, error)
+//	CreateLog(table string, LogRecords interface{}, userId string) (mcresponse.ResponseMessage, error)
+//	UpdateLog(TableName string, LogRecords interface{}, NewLogRecords interface{}, userId string) (mcresponse.ResponseMessage, error)
+//	ReadLog(TableName string, LogRecords interface{}, userId string) (mcresponse.ResponseMessage, error)
+//	DeleteLog(TableName string, LogRecords interface{}, userId string) (mcresponse.ResponseMessage, error)
+//	LoginLog(LogRecords interface{}, userId string, TableName string) (mcresponse.ResponseMessage, error)
+//	LogoutLog(LogRecords interface{}, userId string, TableName string) (mcresponse.ResponseMessage, error)
+//	AuditLog(LogType, userId string, options AuditLogOptionsType) (mcresponse.ResponseMessage, error)
 //}
 
 // constants

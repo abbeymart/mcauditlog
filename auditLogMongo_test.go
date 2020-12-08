@@ -7,6 +7,7 @@ package mcauditlog
 import (
 	"encoding/json"
 	"fmt"
+	"go.mongodb.org/mongo-driver/mongo"
 	"strings"
 	"testing"
 )
@@ -15,15 +16,7 @@ import (
 	"github.com/abbeymart/mctestgo"
 )
 
-type TestParam struct {
-	Name     string
-	Desc     string
-	Url      string
-	Priority int
-	Cost     float64
-}
-
-func TestAuditLog(t *testing.T) {
+func TestAuditLogMongo(t *testing.T) {
 	// test-data: db-configuration settings
 
 	tableName := "services"
@@ -37,36 +30,39 @@ func TestAuditLog(t *testing.T) {
 	readP := map[string][]string{"keywords": {"lagos", "nigeria", "ghana", "accra"}}
 	readParams, _ := json.Marshal(readP)
 
-	myDb := mcdb.DbConfig{
-		DbType:   "postgres",
+	myDb := mcdb.MongoDbConfig{
+		DbType:   "mongodb",
 		Host:     "localhost",
-		Username: "postgres",
+		Username: "abbeymart",
 		Password: "ab12testing",
-		Port:     5432,
+		Port:     27017,
 		DbName:   "mcdev",
 		Filename: "testdb.db",
 		PoolSize: 20,
-		Url:      "localhost:5432",
+		Url:      "mongodb://localhost:27017",
 	}
-	myDb.Options = mcdb.DbConnectOptions{}
+	myDb.Options = mcdb.MongoDbConnectOptions{}
 
 	// db-connection
-	dbc, err := myDb.OpenDb()
-	//fmt.Printf("*****dbc-info: %v\n", dbc)
+	dbc, err := myDb.OpenMongoDb()
+	var mgDb *mongo.Database
+	// fmt.Printf("*****dbc-info: %v\n", dbc)
 	// defer dbClose
-	defer myDb.CloseDb()
+	defer myDb.CloseMongoDb()
 	// check db-connection-error
-	if err != nil {
+	if err == nil {
+		mgDb = dbc.Database(myDb.DbName)
+	} else {
 		fmt.Printf("*****db-connection-error: %v\n", err.Error())
 		return
 	}
 	// expected db-connection result
-	mcLogResult := LogParam{AuditDb: dbc, AuditTable: "audits"}
+	mcLogResult := LogParamMongo{AuditDb: mgDb, AuditTable: "audits"}
 	// audit-log instance
-	mcLog := NewAuditLog(dbc, "audits")
+	mcLog := NewAuditLogMongo(mgDb, "audits")
 
 	mctest.McTest(mctest.OptionValue{
-		Name: "should connect to the DB and return an instance object:",
+		Name: "should connect to the mongoDB and return an instance object:",
 		TestFunc: func() {
 			mctest.AssertEquals(t, err, nil, "error-response should be: nil")
 			mctest.AssertEquals(t, mcLog, mcLogResult, "db-connection instance should be: "+mcLogResult.String())
@@ -122,8 +118,8 @@ func TestAuditLog(t *testing.T) {
 		Name: "should store login-transaction log and return success:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(LoginLog, userId, AuditLogOptionsType{
-				TableName:  tableName,
-				LogRecords: string(tableRecords),
+				TableName:     tableName,
+				LogRecords:    string(tableRecords),
 			})
 			mctest.AssertEquals(t, err, nil, "error-response should be: nil")
 			mctest.AssertEquals(t, res.Code, "success", "log-action response-code should be: success")
@@ -133,8 +129,8 @@ func TestAuditLog(t *testing.T) {
 		Name: "should store logout-transaction log and return success:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(LogoutLog, userId, AuditLogOptionsType{
-				TableName:  tableName,
-				LogRecords: string(tableRecords),
+				TableName:     tableName,
+				LogRecords:    string(tableRecords),
 			})
 			mctest.AssertEquals(t, err, nil, "error-response should be: nil")
 			mctest.AssertEquals(t, res.Code, "success", "log-action response-code should be: success")
@@ -144,8 +140,8 @@ func TestAuditLog(t *testing.T) {
 		Name: "should return paramsError for incomplete/undefined inputs:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(CreateLog, "", AuditLogOptionsType{
-				TableName:  tableName,
-				LogRecords: string(tableRecords),
+				TableName:     tableName,
+				LogRecords:    string(tableRecords),
 			})
 			//fmt.Printf("params-res: %#v", res)
 			mctest.AssertNotEquals(t, err, nil, "error-response should not be: nil")

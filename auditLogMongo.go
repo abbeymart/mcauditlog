@@ -5,7 +5,7 @@
 package mcauditlog
 
 import (
-	"database/sql"
+	"context"
 	"errors"
 	"fmt"
 	"github.com/abbeymart/mcresponsego"
@@ -16,11 +16,20 @@ import (
 
 // interfaces / types
 type LogParamMongo struct {
-	AuditDb    *mongo.Client
+	AuditDb    *mongo.Database
 	AuditTable string
 }
 
-func NewAuditLogMongo(auditDb *mongo.Client, auditTable string) LogParamMongo {
+type AuditRecord struct {
+	TableName     string      `json:"table_name,omitempty"`
+	LogType       string      `json:"log_type,omitempty"`
+	LogBy         string      `json:"log_by,omitempty"`
+	LogAt         time.Time   `json:"log_at,omitempty"`
+	LogRecords    interface{} `json:"log_records,omitempty"`
+	NewLogRecords interface{} `json:"new_log_records,omitempty"`
+}
+
+func NewAuditLogMongo(auditDb *mongo.Database, auditTable string) LogParamMongo {
 	result := LogParamMongo{}
 	result.AuditDb = auditDb
 	result.AuditTable = auditTable
@@ -42,41 +51,38 @@ func (log LogParamMongo) String() string {
 
 func (log LogParamMongo) AuditLog(logType, userId string, options AuditLogOptionsType) (mcresponse.ResponseMessage, error) {
 	// variables
-	logType = strings.ToLower(logType)
-	logBy := userId
+	loggingType := strings.ToLower(logType)
+	logUserId := userId
 
 	var (
-		tableName     = ""
-		sqlScript     = ""
-		logRecords    interface{}
-		newLogRecords interface{}
-		logAt         time.Time
-
-		dbResult sql.Result
-		err      error
+		tabName     = ""
+		logRecs     interface{}
+		newLogRecs  interface{}
+		loggingAt   time.Time
+		auditRecord AuditRecord
 	)
 
 	// log-cases
-	switch logType {
+	switch loggingType {
 	case CreateLog:
 		// set params
-		tableName = options.TableName
-		logRecords = options.LogRecords
-		logAt = time.Now()
+		tabName = options.TableName
+		logRecs = options.LogRecords
+		loggingAt = time.Now()
 
 		// validate params
 		var errorMessage = ""
-		if tableName == "" {
+		if tabName == "" {
 			errorMessage = "Table or Collection name is required."
 		}
-		if logBy == "" {
+		if logUserId == "" {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | userId is required."
 			} else {
 				errorMessage = "userId is required."
 			}
 		}
-		if logRecords == nil {
+		if logRecs == nil {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | Created record(s) information is required."
 			} else {
@@ -91,39 +97,42 @@ func (log LogParamMongo) AuditLog(logType, userId string, options AuditLogOption
 				}), errors.New(errorMessage)
 		}
 
-		// compose SQL-script
-		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
-
-		// perform db-log-insert action
-		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
+		// define audit-record
+		auditRecord = AuditRecord{
+			TableName:  tabName,
+			LogRecords: logRecs,
+			LogType:    loggingType,
+			LogBy:      logUserId,
+			LogAt:      loggingAt,
+		}
 	case UpdateLog:
 		// set params
-		tableName = options.TableName
-		logRecords = options.LogRecords
-		newLogRecords = options.NewLogRecords
-		logAt = time.Now()
+		tabName = options.TableName
+		logRecs = options.LogRecords
+		newLogRecs = options.NewLogRecords
+		loggingAt = time.Now()
 
 		// validate params
 		var errorMessage = ""
-		if tableName == "" {
+		if tabName == "" {
 			errorMessage = "Table or Collection name is required."
 		}
-		if logBy == "" {
+		if logUserId == "" {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | userId is required."
 			} else {
 				errorMessage = "userId is required."
 			}
 		}
-		if logRecords == nil {
+		if logRecs == nil {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | Updated record(s) information is required."
 			} else {
 				errorMessage = "Updated record(s) information is required."
 			}
 		}
-		if newLogRecords == nil {
-			if errorMessage != ""{
+		if newLogRecs == nil {
+			if errorMessage != "" {
 				errorMessage = errorMessage + " | New/Update record(s) information is required."
 			} else {
 				errorMessage = "New/Update record(s) information is required."
@@ -137,30 +146,34 @@ func (log LogParamMongo) AuditLog(logType, userId string, options AuditLogOption
 				}), errors.New(errorMessage)
 		}
 
-		// compose SQL-script
-		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, new_log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5, $6)", log.AuditTable)
-
-		// perform db-log-insert action
-		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, newLogRecords, logType, logBy, logAt)
+		// define audit-record
+		auditRecord = AuditRecord{
+			TableName:     tabName,
+			LogRecords:    logRecs,
+			NewLogRecords: newLogRecs,
+			LogType:       loggingType,
+			LogBy:         logUserId,
+			LogAt:         loggingAt,
+		}
 	case GetLog, ReadLog:
 		// set params
-		tableName = options.TableName
-		logRecords = options.LogRecords
-		logAt = time.Now()
+		tabName = options.TableName
+		logRecs = options.LogRecords
+		loggingAt = time.Now()
 
 		// validate params
 		var errorMessage = ""
-		if tableName == "" {
+		if tabName == "" {
 			errorMessage = "Table or Collection name is required."
 		}
-		if logBy == "" {
+		if logUserId == "" {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | userId is required."
 			} else {
 				errorMessage = "userId is required."
 			}
 		}
-		if logRecords == nil {
+		if logRecs == nil {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | Read/Get Params/Keywords information is required."
 			} else {
@@ -175,30 +188,33 @@ func (log LogParamMongo) AuditLog(logType, userId string, options AuditLogOption
 				}), errors.New(errorMessage)
 		}
 
-		// compose SQL-script
-		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
-
-		// perform db-log-insert action
-		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
+		// define audit-record
+		auditRecord = AuditRecord{
+			TableName:  tabName,
+			LogRecords: logRecs,
+			LogType:    logType,
+			LogBy:      logUserId,
+			LogAt:      loggingAt,
+		}
 	case DeleteLog, RemoveLog:
 		// set params
-		tableName = options.TableName
-		logRecords = options.LogRecords
-		logAt = time.Now()
+		tabName = options.TableName
+		logRecs = options.LogRecords
+		loggingAt = time.Now()
 
 		// validate params
 		var errorMessage = ""
-		if tableName == "" {
+		if tabName == "" {
 			errorMessage = "Table or Collection name is required."
 		}
-		if logBy == "" {
+		if logUserId == "" {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | userId is required."
 			} else {
 				errorMessage = "userId is required."
 			}
 		}
-		if logRecords == nil {
+		if logRecs == nil {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | Deleted record(s) information is required."
 			} else {
@@ -213,30 +229,33 @@ func (log LogParamMongo) AuditLog(logType, userId string, options AuditLogOption
 				}), errors.New(errorMessage)
 		}
 
-		// compose SQL-script
-		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
-
-		// perform db-log-insert action
-		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
+		// define audit-record
+		auditRecord = AuditRecord{
+			TableName:  tabName,
+			LogRecords: logRecs,
+			LogType:    logType,
+			LogBy:      logUserId,
+			LogAt:      loggingAt,
+		}
 	case LoginLog:
 		// set params
-		tableName = options.TableName
-		logRecords = options.LogRecords
-		logAt = time.Now()
+		tabName = options.TableName
+		logRecs = options.LogRecords
+		loggingAt = time.Now()
 
 		// validate params
 		var errorMessage = ""
-		if tableName == "" {
+		if tabName == "" {
 			errorMessage = "Table or Collection name is required."
 		}
-		if logBy == "" {
+		if logUserId == "" {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | userId is required."
 			} else {
 				errorMessage = "userId is required."
 			}
 		}
-		if logRecords == nil {
+		if logRecs == nil {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | Login record(s) information is required."
 			} else {
@@ -251,30 +270,33 @@ func (log LogParamMongo) AuditLog(logType, userId string, options AuditLogOption
 				}), errors.New(errorMessage)
 		}
 
-		// compose SQL-script
-		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
-
-		// perform db-log-insert action
-		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
+		// define audit-record
+		auditRecord = AuditRecord{
+			TableName:  tabName,
+			LogRecords: logRecs,
+			LogType:    logType,
+			LogBy:      logUserId,
+			LogAt:      loggingAt,
+		}
 	case LogoutLog:
 		// set params
-		tableName = options.TableName
-		logRecords = options.LogRecords
-		logAt = time.Now()
+		tabName = options.TableName
+		logRecs = options.LogRecords
+		loggingAt = time.Now()
 
 		// validate params
 		var errorMessage = ""
-		if tableName == "" {
+		if tabName == "" {
 			errorMessage = "Table or Collection name is required."
 		}
-		if logBy == "" {
+		if logUserId == "" {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | userId is required."
 			} else {
 				errorMessage = "userId is required."
 			}
 		}
-		if logRecords == nil {
+		if logRecs == nil {
 			if errorMessage != "" {
 				errorMessage = errorMessage + " | Logout record(s) information is required."
 			} else {
@@ -289,12 +311,14 @@ func (log LogParamMongo) AuditLog(logType, userId string, options AuditLogOption
 				}), errors.New(errorMessage)
 		}
 
-		// compose SQL-script
-		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
-
-		// perform db-log-insert action
-		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
-
+		// define audit-record
+		auditRecord = AuditRecord{
+			TableName:  tabName,
+			LogRecords: logRecs,
+			LogType:    logType,
+			LogBy:      logUserId,
+			LogAt:      loggingAt,
+		}
 	default:
 		return mcresponse.GetResMessage("logError",
 			mcresponse.ResponseMessageOptions{
@@ -302,6 +326,10 @@ func (log LogParamMongo) AuditLog(logType, userId string, options AuditLogOption
 				Value:   nil,
 			}), errors.New("unknown log type and/or incomplete log information")
 	}
+
+	// perform db-log-insert action
+	dbColl := log.AuditDb.Collection(log.AuditTable)
+	dbResult, err := dbColl.InsertOne(context.TODO(), auditRecord)
 
 	// Handle error
 	if err != nil {
