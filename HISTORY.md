@@ -1,5 +1,10 @@
 # Historical logs
 
+## Version 0.2.1
+
+- Release date: Dec 10, 2020
+- Patched with mcresponsego package, v0.4.0
+
 ## Version 0.2.0
 
 - Release date: Dec 08, 2020
