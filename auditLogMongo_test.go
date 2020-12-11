@@ -62,14 +62,14 @@ func TestAuditLogMongo(t *testing.T) {
 	mcLog := NewAuditLogMongo(mgDb, "audits")
 
 	mctest.McTest(mctest.OptionValue{
-		Name: "should connect to the mongoDB and return an instance object:",
+		Name: "[MongoDB]should connect to the mongoDB and return an instance object:",
 		TestFunc: func() {
 			mctest.AssertEquals(t, err, nil, "error-response should be: nil")
 			mctest.AssertEquals(t, mcLog, mcLogResult, "db-connection instance should be: "+mcLogResult.String())
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "should store create-transaction log and return success:",
+		Name: "[MongoDB]should store create-transaction log and return success:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(CreateLog, userId, AuditLogOptionsType{
 				TableName:  tableName,
@@ -81,7 +81,7 @@ func TestAuditLogMongo(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "should store update-transaction log and return success:",
+		Name: "[MongoDB]should store update-transaction log and return success:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(UpdateLog, userId, AuditLogOptionsType{
 				TableName:     tableName,
@@ -93,7 +93,7 @@ func TestAuditLogMongo(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "should store read-transaction log and return success:",
+		Name: "[MongoDB]should store read-transaction log and return success:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(ReadLog, userId, AuditLogOptionsType{
 				TableName:  tableName,
@@ -104,7 +104,7 @@ func TestAuditLogMongo(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "should store delete-transaction log and return success:",
+		Name: "[MongoDB]should store delete-transaction log and return success:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(DeleteLog, userId, AuditLogOptionsType{
 				TableName:  tableName,
@@ -115,7 +115,7 @@ func TestAuditLogMongo(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "should store login-transaction log and return success:",
+		Name: "[MongoDB]should store login-transaction log and return success:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(LoginLog, userId, AuditLogOptionsType{
 				TableName:     tableName,
@@ -126,7 +126,7 @@ func TestAuditLogMongo(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "should store logout-transaction log and return success:",
+		Name: "[MongoDB]should store logout-transaction log and return success:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(LogoutLog, userId, AuditLogOptionsType{
 				TableName:     tableName,
@@ -137,7 +137,7 @@ func TestAuditLogMongo(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "should return paramsError for incomplete/undefined inputs:",
+		Name: "[MongoDB]should return paramsError for incomplete/undefined inputs:",
 		TestFunc: func() {
 			res, err := mcLog.AuditLog(CreateLog, "", AuditLogOptionsType{
 				TableName:     tableName,

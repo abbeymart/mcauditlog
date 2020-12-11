@@ -1,5 +1,10 @@
 # Historical logs
 
+## Version 0.3.0
+
+- Release date: Dec 11, 2020
+- Added pgxpool-auditLog test cases and refactored test-cases for clarity
+
 ## Version 0.2.1
 
 - Release date: Dec 10, 2020

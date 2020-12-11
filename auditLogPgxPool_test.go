@@ -15,15 +15,7 @@ import (
 	"github.com/abbeymart/mctestgo"
 )
 
-type TestParam struct {
-	Name     string
-	Desc     string
-	Url      string
-	Priority int
-	Cost     float64
-}
-
-func TestAuditLog(t *testing.T) {
+func TestAuditLogPgxPool(t *testing.T) {
 	// test-data: db-configuration settings
 
 	tableName := "services"
@@ -51,31 +43,31 @@ func TestAuditLog(t *testing.T) {
 	myDb.Options = mcdb.DbConnectOptions{}
 
 	// db-connection
-	dbc, err := myDb.OpenDb()
+	dbc, err := myDb.OpenPgxDbPool()
 	//fmt.Printf("*****dbc-info: %v\n", dbc)
 	// defer dbClose
-	defer myDb.CloseDb()
+	defer myDb.ClosePgxDbPool()
 	// check db-connection-error
 	if err != nil {
 		fmt.Printf("*****db-connection-error: %v\n", err.Error())
 		return
 	}
 	// expected db-connection result
-	mcLogResult := LogParam{AuditDb: dbc, AuditTable: "audits"}
+	mcLogResult := PgxLogParam{AuditDb: dbc.DbConn, AuditTable: "audits"}
 	// audit-log instance
-	mcLog := NewAuditLog(dbc, "audits")
+	mcLog := NewAuditLogPgx(dbc.DbConn, "audits")
 
 	mctest.McTest(mctest.OptionValue{
-		Name: "[Pg]should connect to the DB and return an instance object:",
+		Name: "[PgxPool]should connect to the PgxDB and return an instance object:",
 		TestFunc: func() {
 			mctest.AssertEquals(t, err, nil, "error-response should be: nil")
 			mctest.AssertEquals(t, mcLog, mcLogResult, "db-connection instance should be: "+mcLogResult.String())
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "[Pg]should store create-transaction log and return success:",
+		Name: "[PgxPool]should store create-transaction log and return success:",
 		TestFunc: func() {
-			res, err := mcLog.AuditLog(CreateLog, userId, AuditLogOptionsType{
+			res, err := mcLog.AuditLog(CreateLog, userId, PgxAuditLogOptionsType{
 				TableName:  tableName,
 				LogRecords: string(tableRecords),
 			})
@@ -85,9 +77,9 @@ func TestAuditLog(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "[Pg]should store update-transaction log and return success:",
+		Name: "[PgxPool]should store update-transaction log and return success:",
 		TestFunc: func() {
-			res, err := mcLog.AuditLog(UpdateLog, userId, AuditLogOptionsType{
+			res, err := mcLog.AuditLog(UpdateLog, userId, PgxAuditLogOptionsType{
 				TableName:     tableName,
 				LogRecords:    string(tableRecords),
 				NewLogRecords: string(newTableRecords),
@@ -97,9 +89,9 @@ func TestAuditLog(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "[Pg]should store read-transaction log and return success:",
+		Name: "[PgxPool]should store read-transaction log and return success:",
 		TestFunc: func() {
-			res, err := mcLog.AuditLog(ReadLog, userId, AuditLogOptionsType{
+			res, err := mcLog.AuditLog(ReadLog, userId, PgxAuditLogOptionsType{
 				TableName:  tableName,
 				LogRecords: string(readParams),
 			})
@@ -108,9 +100,9 @@ func TestAuditLog(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "[Pg]should store delete-transaction log and return success:",
+		Name: "[PgxPool]should store delete-transaction log and return success:",
 		TestFunc: func() {
-			res, err := mcLog.AuditLog(DeleteLog, userId, AuditLogOptionsType{
+			res, err := mcLog.AuditLog(DeleteLog, userId, PgxAuditLogOptionsType{
 				TableName:  tableName,
 				LogRecords: string(tableRecords),
 			})
@@ -119,9 +111,9 @@ func TestAuditLog(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "[Pg]should store login-transaction log and return success:",
+		Name: "[PgxPool]should store login-transaction log and return success:",
 		TestFunc: func() {
-			res, err := mcLog.AuditLog(LoginLog, userId, AuditLogOptionsType{
+			res, err := mcLog.AuditLog(LoginLog, userId, PgxAuditLogOptionsType{
 				TableName:  tableName,
 				LogRecords: string(tableRecords),
 			})
@@ -130,9 +122,9 @@ func TestAuditLog(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "[Pg]should store logout-transaction log and return success:",
+		Name: "[PgxPool]should store logout-transaction log and return success:",
 		TestFunc: func() {
-			res, err := mcLog.AuditLog(LogoutLog, userId, AuditLogOptionsType{
+			res, err := mcLog.AuditLog(LogoutLog, userId, PgxAuditLogOptionsType{
 				TableName:  tableName,
 				LogRecords: string(tableRecords),
 			})
@@ -141,9 +133,9 @@ func TestAuditLog(t *testing.T) {
 		},
 	})
 	mctest.McTest(mctest.OptionValue{
-		Name: "[Pg]should return paramsError for incomplete/undefined inputs:",
+		Name: "[PgxPool]should return paramsError for incomplete/undefined inputs:",
 		TestFunc: func() {
-			res, err := mcLog.AuditLog(CreateLog, "", AuditLogOptionsType{
+			res, err := mcLog.AuditLog(CreateLog, "", PgxAuditLogOptionsType{
 				TableName:  tableName,
 				LogRecords: string(tableRecords),
 			})
