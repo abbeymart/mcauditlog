@@ -12,8 +12,8 @@ import (
 	"testing"
 )
 import (
-	"github.com/abbeymart/mcdbgo"
-	"github.com/abbeymart/mctestgo"
+	"github.com/abbeymart/mcdb"
+	"github.com/abbeymart/mctest"
 )
 
 func TestAuditLogMongo(t *testing.T) {

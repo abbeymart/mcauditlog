@@ -8,7 +8,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/abbeymart/mcresponsego"
+	"github.com/abbeymart/mcresponse"
 	"strings"
 	"time"
 )

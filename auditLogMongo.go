@@ -8,7 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/abbeymart/mcresponsego"
+	"github.com/abbeymart/mcresponse"
 	"go.mongodb.org/mongo-driver/mongo"
 	"strings"
 	"time"
