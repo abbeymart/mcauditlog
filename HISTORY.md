@@ -1,5 +1,10 @@
 # Historical logs
 
+## Version 0.3.3
+
+- Release date: Jan 12, 2021
+- Removed console-debug-print
+
 ## Version 0.3.0
 
 - Release date: Dec 11, 2020

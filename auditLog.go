@@ -141,13 +141,13 @@ func (log LogParam) AuditLog(logType, userId string, options AuditLogOptionsType
 				}), errors.New(errorMessage)
 		}
 
-		fmt.Println("before log-insert")
+		//fmt.Println("before log-insert")
 		// compose SQL-script
 		sqlScript = fmt.Sprintf("INSERT INTO %v(table_name, log_records, log_type, log_by, log_at ) VALUES ($1, $2, $3, $4, $5)", log.AuditTable)
 
 		// perform db-log-insert action
 		dbResult, err = log.AuditDb.Exec(sqlScript, tableName, logRecords, logType, logBy, logAt)
-		fmt.Printf("after log-insert: result => %v | err => %v \n", dbResult, err)
+		//fmt.Printf("after log-insert: result => %v | err => %v \n", dbResult, err)
 	case UpdateLog:
 		// set params
 		tableName = options.TableName
