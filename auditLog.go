@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// interfaces / types
+// LogParam interfaces / types
 type LogParam struct {
 	AuditDb    *sql.DB
 	AuditTable string

@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-// interfaces / types
+// PgxLogParam interfaces / types
 type PgxLogParam struct {
 	AuditDb    *pgxpool.Pool
 	AuditTable string

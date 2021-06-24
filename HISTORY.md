@@ -1,5 +1,11 @@
 # Historical logs
 
+## Version 0.4.0
+
+- Release date: June 23, 2021
+- updated dep to mcdb-v0.3.0, mcresponse-v0.5.0 and refactored types
+
+
 ## Version 0.3.4
 
 - Release date: Jan 26, 2021
